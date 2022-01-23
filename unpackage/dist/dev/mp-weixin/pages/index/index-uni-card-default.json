@@ -1,6 +1,5 @@
 {
-  "navigationBarTitleText": "Banbang",
-  "enablePullDownRefresh": true,
+  "component": true,
   "usingComponents": {
     "index-uni-card-default": "/pages/index/index-uni-card-default",
     "uni-card": "/uni_modules/uni-card/components/uni-card/uni-card",

@@ -105,6 +105,9 @@ try {
   components = {
     uniCard: function() {
       return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 42))
+    },
+    uniFav: function() {
+      return Promise.all(/*! import() | uni_modules/uni-fav/components/uni-fav/uni-fav */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-fav/components/uni-fav/uni-fav")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-fav/components/uni-fav/uni-fav.vue */ 34))
     }
   }
 } catch (e) {
@@ -191,10 +194,18 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
     return {
+
+      // 通知对象列表
+      // TODO: 列表应该从服务器获取，这里的test_notificationsList仅作为示例
       test_notificationsList: [{
         no: 0,
         title: 'Normal',
@@ -204,7 +215,7 @@ var _default =
       {
         no: 1,
         title: 'Special',
-        content: '特别通知，内容在这里呈现，内容在这里呈现，，内容在这里呈现，内容在这里呈现',
+        content: '特别通知，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长',
         level: 2 },
 
       {
@@ -217,7 +228,13 @@ var _default =
         no: 3,
         title: 'upLoad',
         content: '文件资料收集，内容在这里呈现，内容在这里呈现',
-        level: 0 }] };
+        level: 0 },
+
+      {
+        no: 4,
+        title: 'Normal',
+        content: '一般通知2，内容在这里呈现，内容在这里呈现',
+        level: 1 }] };
 
 
 
@@ -227,14 +244,35 @@ var _default =
       console.log("log here" + val);
     },
 
+    //将通知等级转换为文字，默认返回“一般通知”
     getNotiLevelStr: function getNotiLevelStr(val) {
       switch (val) {
-        case 1:return "一般通知";break;
-        case 2:return "特别通知";break;
-        case 3:return "紧急通知";break;
-        case 0:return "资料收集";break;
-        default:return "一般通知";break;}
+        case 1:
+          return "一般通知";
+          break;
+        case 2:
+          return "特别通知";
+          break;
+        case 3:
+          return "紧急通知";
+          break;
+        case 0:
+          return "资料收集";
+          break;
+        default:
+          return "一般通知";
+          break;}
 
+
+    },
+
+    // 测试点击事件，弹出提示框
+    beTapped: function beTapped(msg) {
+      console.log(msg);
+      wx.showToast({
+        title: msg,
+        icon: 'success',
+        duration: 1500 });
 
     } } };exports.default = _default;
 
