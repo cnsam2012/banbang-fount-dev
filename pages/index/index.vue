@@ -7,53 +7,139 @@
 			v-model="keywords">
 		</uni-search-bar>
 
-		<!-- 使用了uni-app卡片组件 -->
-		<view v-for="(item, no) in test_notificationsList" :key="item.no">
-			<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
-				@click="beTapped(item.title)">
+		<uni-collapse>
+			<!-- 未读通知不被折叠 -->
+			<!-- 使用了uni-app卡片组件 -->
+			<!-- 约定 level >= 0 即为未读通知 -->
+			<!-- 渲染未读通知列表 -->
+			<view v-for="(item, i) in test_notificationsList" :key="item.no">
+				<template v-if="item.level >= 0">
+					<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
+						@click="beTapped(item.title)">
+						<!-- 卡片内容区域 -->
 
-				<!-- 卡片内容区域 -->
-				<text class="noti_content">{{item.content}}</text>
+						<!-- 通知编号标签 -->
+						<uni-tag :text="item.no" type="error" :circle="true" size="mini" style="padding: 25rpx;"
+							inverted="true"></uni-tag>
 
-				<!-- 卡片按钮区域 -->
-				<!-- 配合native，阻止事件冒泡 -->
-				<view class="btnBox" style="padding: 30rpx 0 0 0;">
-					<view class="btnInCard" @click.native.stop="checkBeTapped(item.title)">
-						<uni-icons type="checkmarkempty" size="25"></uni-icons>
+						<!-- 通知内容区域 -->
+						<text class="noti_content">
+							<!-- 渲染循环节 i，仅方便开发测试，发布时删除 -->
+							循环节 i = {{i}}, 内容如下：
+
+							<!-- 通知内容 -->
+							{{item.content}}
+						</text>
+
+						<!-- 卡片按钮区域 -->
+						<!-- 配合native，阻止事件冒泡 -->
+						<view class="btnBox" style="padding: 30rpx 0 0 0;">
+							<view class="btnInCard" @click.native.stop="checkBeTapped(item.title)">
+								<uni-icons type="checkmarkempty" size="25"></uni-icons>
+							</view>
+							<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
+								<uni-icons type="star-filled" size="25"></uni-icons>
+							</view>
+							<view class="btnInCard" @click.native.stop="moreBeTapped(i, item.no)">
+								<uni-icons type="more-filled" size="25"></uni-icons>
+							</view>
+						</view>
+					</uni-card>
+				</template>
+				<!-- "更多"菜单内容 -->
+				<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
+					<!-- 按钮区域 -->
+					<view class="btnBox" style="padding: 0;">
+						<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
+							<uni-icons type="checkmarkempty" size="25">
+							</uni-icons>
+							<text>已读</text>
+						</view>
+						<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
+							<uni-icons type="star-filled" size="25">
+							</uni-icons>
+							<text>收藏</text>
+						</view>
 					</view>
-					<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
-						<uni-icons type="star-filled" size="25"></uni-icons>
-					</view>
-					<view class="btnInCard" @click.native.stop="moreBeTapped(item.no)">
-						<uni-icons type="more-filled" size="25"></uni-icons>
-					</view>
+					<!-- 列表菜单 -->
+					<uni-list>
+						<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
+						</uni-list-item>
+						<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
+						</uni-list-item>
+						<uni-list-item title="取消" clickable @click.native.stop="closeMenu(i, item.no)"></uni-list-item>
+					</uni-list>
+				</uni-popup>
+			</view>
+
+			<!-- 折叠已读通知 -->
+			<uni-collapse-item title="全部已读" show-animation="true">
+				<!-- 使用了uni-app卡片组件 -->
+				<!-- 约定 level < 0 即为已读通知 -->
+				<!-- 渲染已读通知列表 -->
+				<view v-for="(item, i) in test_notificationsList" :key="item.no">
+					<template v-if="item.level < 0">
+						<uni-card :title="item.title" mode="title" :is-shadow="true"
+							:extra="getNotiLevelStr(item.level)" @click="beTapped(item.title)">
+							<!-- 卡片内容区域 -->
+
+							<!-- 通知编号标签 -->
+							<uni-tag :text="item.no" type="primary" :circle="true" size="mini" style="padding: 25rpx;"
+								inverted="true"></uni-tag>
+
+							<!-- 通知内容区域 -->
+							<text class="noti_content">
+								<!-- 渲染循环节 i，仅方便开发测试，发布时删除 -->
+								循环节 i = {{i}}, 内容如下：
+
+								<!-- 通知内容 -->
+								{{item.content}}
+							</text>
+
+							<!-- 卡片按钮区域 -->
+							<!-- 配合native，阻止事件冒泡 -->
+							<view class="btnBox" style="padding: 30rpx 0 0 0;">
+								<view class="btnInCard" @click.native.stop="unreadBeTapped(item.title)">
+									<uni-icons type="flag-filled" size="25"></uni-icons>
+								</view>
+								<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
+									<uni-icons type="star-filled" size="25"></uni-icons>
+								</view>
+								<view class="btnInCard" @click.native.stop="readMoreBeTapped(i, item.no)">
+									<uni-icons type="more-filled" size="25"></uni-icons>
+								</view>
+							</view>
+						</uni-card>
+					</template>
+					<!-- "更多"菜单内容 -->
+					<uni-popup ref="readPopup" type="bottom" background-color="#fff" @click.native.stop>
+						<!-- 按钮区域 -->
+						<view class="btnBox" style="padding: 0;">
+							<view @click.native.stop="unreadBeTapped(item.title)" class="btnInMore">
+								<uni-icons type="flag-filled" size="25">
+								</uni-icons>
+								<text>重置为未读</text>
+							</view>
+							<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
+								<uni-icons type="star-filled" size="25">
+								</uni-icons>
+								<text>收藏</text>
+							</view>
+						</view>
+						<!-- 列表菜单 -->
+						<uni-list>
+							<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
+							</uni-list-item>
+							<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
+							</uni-list-item>
+							<uni-list-item title="取消" clickable @click.native.stop="readCloseMenu(i, item.no)">
+							</uni-list-item>
+						</uni-list>
+					</uni-popup>
 				</view>
-			</uni-card>
+			</uni-collapse-item>
 
-			<!-- "更多"菜单 -->
-			<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
-				<!-- 按钮区域 -->
-				<view class="btnBox" style="padding: 0;">
-					<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
-						<uni-icons type="checkmarkempty" size="25">
-						</uni-icons>
-						<text>已读</text>
-					</view>
-					<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
-						<uni-icons type="star-filled" size="25">
-						</uni-icons>
-						<text>收藏</text>
-					</view>
-				</view>
-				<!-- 列表菜单 -->
-				<uni-list>
-					<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)"></uni-list-item>
-					<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)"></uni-list-item>
-					<uni-list-item title="取消" clickable @click.native.stop="closeMenu(item.no)"></uni-list-item>
-				</uni-list>
-			</uni-popup>
-		</view>
-
+		</uni-collapse>
 
 	</view>
 
@@ -72,35 +158,59 @@
 				// 新通知对象列表
 				// TODO: 列表应该从服务器获取，这里的test_notificationsList仅作为示例
 				test_notificationsList: [{
-						no: 0,
+						no: 10000,
 						title: 'Normal',
 						content: '一般通知1，内容在这里呈现，内容在这里呈现',
 						level: 1
 					},
 					{
-						no: 1,
+						no: 10001,
 						title: 'Special',
 						content: '特别通知，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长',
 						level: 2
 					},
 					{
-						no: 2,
+						no: 10002,
 						title: 'Emergency',
 						content: '紧急通知，内容在这里呈现，内容在这里呈现',
 						level: 3
 					},
 					{
-						no: 3,
+						no: 10003,
 						title: 'upLoad',
 						content: '文件资料收集，内容在这里呈现，内容在这里呈现',
 						level: 0
 					},
 					{
-						no: 4,
-						title: 'Normal - 2',
+						no: 10004,
+						title: 'Normal -2',
 						content: '一般通知2，内容在这里呈现，内容在这里呈现',
 						level: 1
 					},
+					{
+						no: 10005,
+						title: 'Readed',
+						content: '已读通知，内容在这里呈现，内容在这里呈现',
+						level: -1
+					},
+					{
+						no: 10006,
+						title: 'Readed -2',
+						content: '已读通知2，内容在这里呈现，内容在这里呈现',
+						level: -1
+					},
+					{
+						no: 10007,
+						title: 'Normal -3',
+						content: '一般通知3，它插在两个已读通知中间，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现',
+						level: 1
+					},
+					{
+						no: 10008,
+						title: 'Readed -3',
+						content: '已读通知3，内容在这里呈现，内容在这里呈现',
+						level: -1
+					}
 				]
 			}
 		},
@@ -113,16 +223,19 @@
 			getNotiLevelStr(val) {
 				switch (val) {
 					case 1:
-						return "一般通知";
+						return "一般通知"; //用于通知全部人的普通通知
 						break;
 					case 2:
-						return "特别通知";
+						return "特别通知"; //用于通知特定人员的通知
 						break;
 					case 3:
-						return "紧急通知";
+						return "紧急通知"; //紧急通知，优先级最高
 						break;
 					case 0:
 						return "资料收集";
+						break;
+					case -1:
+						return "已读";
 						break;
 					default:
 						return "一般通知";
@@ -165,13 +278,32 @@
 				})
 			},
 
-			// 更多按钮点击事件，弹出popup菜单
-			moreBeTapped(no) {
-				console.log(no);
-				this.$refs.popup[no].open();
+			// 标记为未读按钮点击事件，弹出提示框
+			unreadBeTapped(msg) {
+				// console.log(msg);
+				wx.showToast({
+					title: msg + ' unread',
+					mask: true,
+					icon: 'success',
+					duration: 1500
+				})
 			},
 
-			// 疑问按钮点击事件，弹出popup菜单
+			// 更多按钮点击事件
+			moreBeTapped(i, no) {
+				console.log("i = " + i);
+				console.log("no = " + no);
+				this.$refs.popup[i].open();
+			},
+
+			// 已读通知 - 更多按钮点击事件
+			readMoreBeTapped(i, no) {
+				console.log("i = " + i);
+				console.log("no = " + no);
+				this.$refs.readPopup[i].open();
+			},
+
+			// 疑问按钮点击事件
 			doubtBeTapped(msg) {
 				// console.log(msg);
 				wx.showToast({
@@ -182,7 +314,7 @@
 				});
 			},
 
-			// 分享按钮点击事件，弹出popup菜单
+			// 分享按钮点击事件
 			shareBeTapped(msg) {
 				// console.log(msg);
 				wx.showToast({
@@ -194,9 +326,17 @@
 			},
 
 			// 菜单中的“取消”按钮点击事件
-			closeMenu(no) {
-				console.log(no + " close");
-				this.$refs.popup[no].close();
+			closeMenu(i, no) {
+				console.log("i = " + i + " close");
+				console.log("no = " + no + " close");
+				this.$refs.popup[i].close();
+			},
+
+			// 已读通知 - 菜单中的“取消”按钮点击事件
+			readCloseMenu(i, no) {
+				console.log("i = " + i + " close");
+				console.log("no = " + no + " close");
+				this.$refs.readPopup[i].close();
 			},
 
 			searchConfirm() {
