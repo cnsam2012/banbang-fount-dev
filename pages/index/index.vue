@@ -12,7 +12,7 @@
 			<!-- 使用了uni-app卡片组件 -->
 			<!-- 约定 level >= 0 即为未读通知 -->
 			<!-- 渲染未读通知列表 -->
-			<view v-for="(item, i) in test_notificationsList" :key="item.no">
+			<view v-for="(item, i) in allNoti" :key="item.no">
 				<template v-if="item.level >= 0">
 					<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
 						@click="beTapped(item.title)">
@@ -77,7 +77,7 @@
 				<!-- 使用了uni-app卡片组件 -->
 				<!-- 约定 level < 0 即为已读通知 -->
 				<!-- 渲染已读通知列表 -->
-				<view v-for="(item, i) in test_notificationsList" :key="item.no">
+				<view v-for="(item, i) in allNoti" :key="item.no">
 					<template v-if="item.level < 0">
 						<uni-card :title="item.title" mode="title" :is-shadow="true"
 							:extra="getNotiLevelStr(item.level)" @click="beTapped(item.title)">
@@ -157,69 +157,53 @@
 
 				// 新通知对象列表
 				// TODO: 列表应该从服务器获取，这里的test_notificationsList仅作为示例
-				test_notificationsList: [{
-						no: 10000,
-						title: 'Normal',
-						content: '一般通知1，内容在这里呈现，内容在这里呈现',
-						level: 1
-					},
-					{
-						no: 10001,
-						title: 'Special',
-						content: '特别通知，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长，我很长',
-						level: 2
-					},
-					{
-						no: 10002,
-						title: 'Emergency',
-						content: '紧急通知，内容在这里呈现，内容在这里呈现',
-						level: 3
-					},
-					{
-						no: 10003,
-						title: 'upLoad',
-						content: '文件资料收集，内容在这里呈现，内容在这里呈现',
-						level: 0
-					},
-					{
-						no: 10004,
-						title: 'Normal -2',
-						content: '一般通知2，内容在这里呈现，内容在这里呈现',
-						level: 1
-					},
-					{
-						no: 10005,
-						title: 'Readed',
-						content: '已读通知，内容在这里呈现，内容在这里呈现',
-						level: -1
-					},
-					{
-						no: 10006,
-						title: 'Readed -2',
-						content: '已读通知2，内容在这里呈现，内容在这里呈现',
-						level: -1
-					},
-					{
-						no: 10007,
-						title: 'Normal -3',
-						content: '一般通知3，它插在两个已读通知中间，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现，内容在这里呈现',
-						level: 1
-					},
-					{
-						no: 10008,
-						title: 'Readed -3',
-						content: '已读通知3，内容在这里呈现，内容在这里呈现',
-						level: -1
-					}
-				]
+				// test_notificationsList: [] --弃用
+				// 页面加载时，该数据被更新
+				allNoti: [{
+					no: 20000,
+					title: '启动node服务！',
+					content: 'node服务没有启动！列表什么都没有！见 ../server/server.js',
+					date: "1984-01-01",
+					time: "20:15",
+					level: 3
+				}]
+
 			}
 		},
+
+		// 页面加载时执行
+		onLoad() {
+			// 更新列表
+			this.getAllNoti();
+		},
+
 		methods: {
+
+			/** 
+			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)
+			 * *** 一定要见../server/server/js! ***
+			 * 
+			 * 从模拟接口获取通知列表对象，并赋至 allNoti
+			 */
+			getAllNoti() {
+				uni.request({
+					url: "http://localhost:3000/notiList",
+					success: (res) => {
+						this.allNoti = res.data.allNoti;
+					}
+				});
+			},
+
 			log(val) {
 				console.log("log here" + val);
 			},
 
-			//将通知等级转换为文字，默认返回“一般通知”
+			/**
+			 * 将通知等级转换为文字，默认返回“一般通知”
+			 * @param {number} val
+			 * @return {string} 
+			 * 
+			 */
 			getNotiLevelStr(val) {
 				switch (val) {
 					case 1:
@@ -339,6 +323,7 @@
 				this.$refs.readPopup[i].close();
 			},
 
+			// 相应搜索框的“搜索”动作
 			searchConfirm() {
 				// console.log(this.keywords);
 				// 弹框提示输入的关键词
