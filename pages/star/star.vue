@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		<noti-card :item="item"></noti-card>
 	</view>
 </template>
 
@@ -8,22 +8,20 @@
 	export default {
 		data() {
 			return {
-				itemList:[]
+				item: {
+					no: 20000,
+					title: '启动node服务！',
+					content: 'node服务没有启动！列表什么都没有！见 ../server/server.js',
+					date: "1984-01-01",
+					time: "20:15",
+					level: 3
+				}
 			};
 		},
 		methods: {
-			getList() {
-				uni.request({
-					url: 'http://localhost:3000/notiList',
-					success: (res) => {
-						console.log(res);
-					}
-				});
-			}
-		},
-		onLoad() {
 			
-		}
+		},
+		
 	}
 </script>
 

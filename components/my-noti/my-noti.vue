@@ -7,12 +7,13 @@
 			v-model="keywords">
 		</uni-search-bar>
 
+
 		<uni-collapse>
 			<!-- 未读通知不被折叠 -->
 			<!-- 使用了uni-app卡片组件 -->
 			<!-- 约定 level >= 0 即为未读通知 -->
 			<!-- 渲染未读通知列表 -->
-			<view v-for="(item, i) in allNoti" :key="item.no">
+			<view v-for="(item, i) in allnoti" :key="item.no">
 				<template v-if="item.level >= 0">
 					<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
 						@click="beTapped(item.title)">
@@ -77,7 +78,7 @@
 				<!-- 使用了uni-app卡片组件 -->
 				<!-- 约定 level < 0 即为已读通知 -->
 				<!-- 渲染已读通知列表 -->
-				<view v-for="(item, i) in allNoti" :key="item.no">
+				<view v-for="(item, i) in allnoti" :key="item.no">
 					<template v-if="item.level < 0">
 						<uni-card :title="item.title" mode="title" :is-shadow="true"
 							:extra="getNotiLevelStr(item.level)" @click="beTapped(item.title)">
@@ -145,9 +146,9 @@
 
 </template>
 
-
-
 <script>
+	import { mapState } from "vuex"
+	
 	export default {
 		data() {
 			return {
@@ -170,30 +171,20 @@
 
 			}
 		},
-
-		// 页面加载时执行
-		onLoad() {
-			// 更新列表
-			this.getAllNoti();
+		computed: {
+			// 按需导入仓库m_noti,
+			...mapState('m_noti', ['allnoti']),
 		},
 
 		methods: {
-
+			
+			
 			/** 
-			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)
+			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)m_no
 			 * *** 一定要见../server/server/js! ***
 			 * 
 			 * 从模拟接口获取通知列表对象，并赋至 allNoti
 			 */
-			getAllNoti() {
-				uni.request({
-					url: "http://localhost:3000/notiList",
-					success: (res) => {
-						this.allNoti = res.data.allNoti;
-					}
-				});
-			},
-
 			log(val) {
 				console.log("log here" + val);
 			},

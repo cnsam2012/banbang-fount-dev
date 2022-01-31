@@ -1,14 +1,7 @@
 {
 	"pages": [
-		/* {
-				"path": "pages/index/index",
-				"style": {
-					"navigationBarTitleText": "uni-app"
-				}
-			}, */
 		{
-			// "path": "pages/home/home",
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "Banbang",
 				"enablePullDownRefresh": true
@@ -44,8 +37,7 @@
 		"position":"top",
 		"selectedColor": "#00aa00",
 		"list": [{
-				// "pagePath": "pages/home/home",
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/home/home",
 				"text": "全部"
 			},
 			{

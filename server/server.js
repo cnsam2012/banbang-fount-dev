@@ -2,9 +2,6 @@
 // node --inspect  server.js
 
 const http = require("http");
-const data = require("../data/dt1");
-const data2 = require("../data/dt2");
-const data3 = require("../data/dt3");
 const notiList = require("../data/notiList");
 
 const server = http.createServer((req, res) => {
@@ -15,15 +12,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
     'Content-Type': 'application/json'
     });
-    if(req.url === '/dt1'){
-        res.end(JSON.stringify(data.data))
-    }
-    if(req.url === '/dt2'){
-        res.end(JSON.stringify(data2.data))
-    }
-    if(req.url === '/dt3'){
-        res.end(JSON.stringify(data3.data))
-    }
+	
 	if(req.url === '/notiList'){
 		res.end(JSON.stringify(notiList.data))
 	}
