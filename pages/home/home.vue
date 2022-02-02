@@ -1,51 +1,60 @@
 <template>
-	<my-noti v-if="allnoti"></my-noti>
-	<view v-else class="no-noti">无通知</view>
+	<view>
 
+		<!-- <my-noti v-if="allnoti"></my-noti> -->
+		<template v-if="allnoti">
+			<main-notiList></main-notiList>
+		</template>
+		<template v-else>
+			<view class="notiBlank">
+				<uni-icons type="minus" size="50"></uni-icons>
+				无通知
+			</view>
+		</template>
+
+	</view>
 </template>
 
 <script>
-	import { mapMutations,mapState } from "vuex"
-	
+	import {
+		mapMutations,
+		mapState,
+		mapActions
+	} from "vuex"
+
 	export default {
 		data() {
-			return {
-			}
+			return {}
 		},
-		
-		// 页面加载时执行
+
+		// 生命周期函数：页面加载时执行
 		onLoad() {
-			// 更新列表
-			this.getAllNoti();
+			// 初始化 Vuex 里的 State
+			this.getNoti();
 		},
+
 		computed: {
-			// 按需导入仓库m_noti,
+			// 分发 m_noti:noti.js 的 State
 			...mapState('m_noti', ['allnoti']),
 		},
+
 		methods: {
-			// 按需导入仓库m_noti,
-			...mapMutations('m_noti', ['updateAllNoti']),
-			/** 
-			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)m_no
-			 * *** 一定要见../server/server/js! ***
-			 * 从模拟接口获取通知列表对象，并赋至 allnoti
-			 */
-			getAllNoti() {
-				uni.request({
-					url: "http://localhost:3000/notiList",
-					success: res => {
-						this.allNoti = res.data.allNoti;
-						this.updateAllNoti(res.data.allNoti)
-					}
-				});
-			},
+			// 分发 m_noti:noti.js 的 Mutations --弃用
+			// ...mapMutations('m_noti', ['updateAllNoti']),
+
+			// 分发 m_noti:noti.js 的 Action
+			...mapActions('m_noti', ['getNoti'])
 		}
 	}
 </script>
 
 <style>
-	.no-noti {
-		text-align: center;
-		line-height: 40px;
+	.notiBlank {
+		/* border: 1px deeppink solid; */
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		line-height: 35px;
+		margin-top: 100rpx;
 	}
 </style>

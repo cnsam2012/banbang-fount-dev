@@ -11,14 +11,14 @@
 			"path": "pages/star/star",
 			"style": {
 				"navigationBarTitleText": "Banbang-star",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
 		}, {
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "Banbang-My",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
 		}
@@ -50,6 +50,7 @@
 			}
 		]
 	},
+	
 	"condition" : { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [

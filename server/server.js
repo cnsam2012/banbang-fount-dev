@@ -13,8 +13,23 @@ const server = http.createServer((req, res) => {
     'Content-Type': 'application/json'
     });
 	
+	if(req.url === '/'){
+		res.end(JSON.stringify({"空":0,"null":1,"ヌル":2}))
+	}
 	if(req.url === '/notiList'){
 		res.end(JSON.stringify(notiList.data))
+	}
+	if(req.url === '/notiList/all'){
+		res.end(JSON.stringify(notiList.data.allNoti))
+	}
+	if(req.url === '/notiList/read'){
+		res.end(JSON.stringify(notiList.data.readNoti))
+	}
+	if(req.url === '/notiList/unread'){
+		res.end(JSON.stringify(notiList.data.unreadNoti))
+	}
+	if(req.url === '/notiList/star'){
+		res.end(JSON.stringify(notiList.data.starNoti))
 	}
 });
 

@@ -9,8 +9,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	modules: {
-		   'm_user': moduleUser,
-		   'm_noti': moduleNoti,
+		// m_user/mapMethods
+		'm_user': moduleUser,
+		
+		// m_noti/mapMethods
+		'm_noti': moduleNoti,
 	}
-  
+
 })

@@ -12,10 +12,6 @@
 				<!-- 通知内容区域 -->
 				<text class="noti_content">
 
-					<!-- 渲染循环节 i，仅方便开发测试，发布时删除 -->
-					<!-- 循环节 i = {{i}}, 内容如下： -->
-					<!-- 已弃用 -->
-
 					<!-- 通知内容 -->
 					{{item.content}}
 				</text>
@@ -77,7 +73,7 @@
 
 
 			/** 
-			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)m_no
+			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)
 			 * *** 一定要见../server/server/js! ***
 			 * 
 			 * 从模拟接口获取通知列表对象，并赋至 allNoti
