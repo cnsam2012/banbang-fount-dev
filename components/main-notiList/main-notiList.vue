@@ -14,8 +14,9 @@
 			<!-- 使用了uni-app卡片组件 -->
 			<!-- 约定 level >= 0 即为未读通知 -->
 			<!-- 渲染未读通知列表 -->
-			<view v-for="(item, i) in unreadNoti" :key="item.no">
-				<noti-card :item='item' ></noti-card>
+			<view v-for="(item, i) in unreadNoti" :key="item.no">		
+		
+				<noti-card :item='item' v-show="search(item,keywords)" :text="search1(item,keywords)"></noti-card>
 			</view>
 
 			<!-- 折叠已读通知 -->
@@ -56,7 +57,16 @@
 			...mapState('m_noti', ['allNoti','unreadNoti','readNoti']),
 		},
 
-		methods: {}
+		methods: {
+			//返回模糊查询结果
+			search(a,b) {
+				return a.content.match(b)
+			},
+			//返回查询并替换掉后的内容
+			search1(a,b) {
+				return a.content.replace(new RegExp(b,"gm"),'<b style="color:red!important;">'+ b +'</b>')
+			}
+		}
 	}
 </script>
 

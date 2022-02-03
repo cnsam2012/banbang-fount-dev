@@ -10,11 +10,14 @@
 					inverted="true"></uni-tag>
 
 				<!-- 通知内容区域 -->
-				<text class="noti_content">
+				
 
 					<!-- 通知内容 -->
-					{{item.content}}
-				</text>
+					<rich-text :nodes="text">
+						
+					</rich-text>
+					
+			
 
 				<!-- 卡片按钮区域 -->
 				<!-- 配合native，阻止事件冒泡 -->
@@ -111,7 +114,11 @@
 					isStar: false,
 					level: 1
 				},
+			},
+			'text':{
+				type:String
 			}
+			
 		},
 		methods: {
 
