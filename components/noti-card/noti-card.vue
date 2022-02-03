@@ -1,12 +1,12 @@
 <template>
 	<view>
-		<template v-if="item.level >= 0">
+
 			<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
 				@click="beTapped(item.title)">
 				<!-- 卡片内容区域 -->
 
 				<!-- 通知编号标签 -->
-				<uni-tag :text="item.no" type="error" :circle="true" size="mini" style="padding: 25rpx;"
+				<uni-tag :text="item.no" :type="numberColor" :circle="true" size="mini" style="padding: 25rpx;"
 					inverted="true"></uni-tag>
 
 				<!-- 通知内容区域 -->
@@ -20,42 +20,43 @@
 				<!-- 配合native，阻止事件冒泡 -->
 				<view class="btnBox" style="padding: 30rpx 0 0 0;">
 					<view class="btnInCard" @click.native.stop="checkBeTapped(item.title)">
-						<uni-icons type="checkmarkempty" size="25"></uni-icons>
+						<uni-icons :type="chkIcon" size="25"></uni-icons>
 					</view>
 					<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
-						<uni-icons type="star-filled" size="25"></uni-icons>
+						<uni-icons :type="favIcon" size="25"></uni-icons>
 					</view>
 					<view class="btnInCard" @click.native.stop="moreBeTapped(item.no)">
 						<uni-icons type="more-filled" size="25"></uni-icons>
 					</view>
 				</view>
 			</uni-card>
-		</template>
-		<!-- "更多"菜单内容 -->
-		<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
-			<!-- 按钮区域 -->
-			<view class="btnBox" style="padding: 0;">
-				<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
-					<uni-icons type="checkmarkempty" size="25">
-					</uni-icons>
-					<text>已读</text>
+
+			<!-- "更多"菜单内容 -->
+			<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
+				<!-- 按钮区域 -->
+				<view class="btnBox" style="padding: 0;">
+					<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
+						<uni-icons :type="chkIcon" size="25">
+						</uni-icons>
+						<text>{{altReadStat}}</text>
+					</view>
+					<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
+						<uni-icons :type="favIcon" size="25">
+						</uni-icons>
+						<text>{{altFavStat}}</text>
+					</view>
 				</view>
-				<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
-					<uni-icons type="star-filled" size="25">
-					</uni-icons>
-					<text>收藏</text>
-				</view>
-			</view>
-			<!-- 列表菜单 -->
-			<uni-list>
-				<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
-				</uni-list-item>
-				<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
-				</uni-list-item>
-				<!-- <uni-list-item title="取消" clickable @click.native.stop="closeMenu(i, item.no)"></uni-list-item> -->
-				<uni-list-item title="取消" clickable @click.native.stop="closeMenu(item.no)"></uni-list-item>
-			</uni-list>
-		</uni-popup>
+				<!-- 列表菜单 -->
+				<uni-list>
+					<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
+					</uni-list-item>
+					<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
+					</uni-list-item>
+					<!-- <uni-list-item title="取消" clickable @click.native.stop="closeMenu(i, item.no)"></uni-list-item> -->
+					<uni-list-item title="取消" clickable @click.native.stop="closeMenu(item.no)"></uni-list-item>
+				</uni-list>
+			</uni-popup>
+
 
 	</view>
 </template>
@@ -65,12 +66,54 @@
 		name: "noti-card",
 		data() {
 			return {
+				// 改变收藏状态标识语
+				altFavStat: "收藏",
+				// 收藏位按钮 - 图标样式
+				favIcon: "star-filled",
 
+				// 改变已读状态标识语
+				altReadStat: "标记为已读",
+				// 已读状态位按钮 - 图标样式
+				chkIcon: "checkmarkempty",
+
+				// 编号颜色
+				numberColor: "error"
 			};
 		},
-		props: ['item'],
-		methods: {
 
+		mounted() {
+			// console.log(this.item);
+			
+			// 读取通知已读状态
+			if(this.item.level < 0 ) {
+				this.altReadStat = "标记为未读";
+				this.chkIcon = "flag-filled";
+				this.numberColor = "primary";
+			}
+			
+			// 读取通知收藏状态
+			if(this.item.isStar) {
+				this.altFavStat = "取消收藏";
+				this.favIcon = "starhalf";
+			}
+		},
+
+		// props: ['item', 'isRead'],
+		props: {
+			'item': {
+				type: Object,
+				default: {
+					no: 10007,
+					title: 'Normal -n',
+					content: '一般通知里呈现，内容在这里呈现',
+					date: "1984-01-01",
+					time: "20:15",
+					isStar: false,
+					level: 1
+				},
+			}
+		},
+		methods: {
 
 			/** 
 			 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)
@@ -112,8 +155,8 @@
 				}
 			},
 
-
 			// mask:true 阻止点击穿透，后续不再作此注释
+			// 卡片点击事件
 			beTapped(msg) {
 				// console.log(msg);
 				wx.showToast({
@@ -125,8 +168,9 @@
 			},
 
 			// 收藏按钮点击事件，弹出提示框
+			// 转换收藏状态
 			favBeTapped(msg) {
-				console.log(msg+ ' fav');
+				console.log(msg + ' fav');
 				wx.showToast({
 					title: msg + ' fav',
 					mask: true,
@@ -136,6 +180,7 @@
 			},
 
 			// 确认按钮点击事件，弹出提示框
+			// 转换已读状态
 			checkBeTapped(msg) {
 				console.log(msg + ' check');
 				wx.showToast({
@@ -146,16 +191,16 @@
 				})
 			},
 
-			// 标记为未读按钮点击事件，弹出提示框
-			unreadBeTapped(msg) {
-				console.log(msg + ' unread');
-				wx.showToast({
-					title: msg + ' unread',
-					mask: true,
-					icon: 'success',
-					duration: 1500
-				})
-			},
+			// 已读通知 - 标记为未读按钮点击事件，弹出提示框 -弃用
+			// unreadBeTapped(msg) {
+			// 	console.log(msg + ' unread');
+			// 	wx.showToast({
+			// 		title: msg + ' unread',
+			// 		mask: true,
+			// 		icon: 'success',
+			// 		duration: 1500
+			// 	})
+			// },
 
 			// 更多按钮点击事件
 			// moreBeTapped(i, no) {
@@ -165,13 +210,13 @@
 				this.$refs.popup.open();
 			},
 
-			// 已读通知 - 更多按钮点击事件
+			// 已读通知 - 更多按钮点击事件 - 弃用
 			// readMoreBeTapped(i, no) {
-			readMoreBeTapped(no) {
-				// console.log("i = " + i);
-				console.log("no = " + no);
-				this.$refs.readPopup.open();
-			},
+			// readMoreBeTapped(no) {
+			// 	// console.log("i = " + i);
+			// 	console.log("no = " + no);
+			// 	this.$refs.readPopup.open();
+			// },
 
 			// 疑问按钮点击事件
 			doubtBeTapped(msg) {
@@ -203,17 +248,18 @@
 				this.$refs.popup.close();
 			},
 
-			// 已读通知 - 菜单中的“取消”按钮点击事件
+			// 已读通知 - 菜单中的“取消”按钮点击事件 - 弃用
 			// readCloseMenu(i, no) {
-			readCloseMenu(no) {
-				// console.log("i = " + i + " close");
-				console.log("no = " + no + " close");
-				this.$refs.readPopup.close();
-			},
+			// readCloseMenu(no) {
+			// 	// console.log("i = " + i + " close");
+			// 	console.log("no = " + no + " close");
+			// 	this.$refs.readPopup.close();
+			// },
 
-			// 相应搜索框的“搜索”动作
+			// 响应搜索框的“搜索”动作
 			searchConfirm() {
 				// console.log(this.keywords);
+				
 				// 弹框提示输入的关键词
 				var msg = this.keywords;
 				wx.showToast({

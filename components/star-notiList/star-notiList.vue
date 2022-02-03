@@ -7,26 +7,13 @@
 			v-model="keywords">
 		</uni-search-bar>
 
-
+		<!-- 为与主页统一样式，故保留 uni-collapse 标签 -->
 		<uni-collapse>
-			
-			<!-- 未读通知不被折叠 -->
-			<!-- 使用了uni-app卡片组件 -->
-			<!-- 约定 level >= 0 即为未读通知 -->
-			<!-- 渲染未读通知列表 -->
-			<view v-for="(item, i) in unreadNoti" :key="item.no">
-				<noti-card :item='item' ></noti-card>
-			</view>
 
-			<!-- 折叠已读通知 -->
-			<uni-collapse-item title="全部已读" show-animation="true">
-				<!-- 使用了uni-app卡片组件 -->
-				<!-- 约定 level < 0 即为已读通知 --> 
-				<!-- 渲染已读通知列表 -->
-				<view v-for="(item, i) in readNoti" :key="item.no">
-					<noti-card :item='item'></noti-card>
-				</view>
-			</uni-collapse-item>
+			<!-- 渲染收藏通知列表 -->
+			<view v-for="(item, i) in starNoti" :key="item.no">
+				<noti-card :item='item'></noti-card>
+			</view>
 
 		</uni-collapse>
 
@@ -35,25 +22,27 @@
 </template>
 
 <script>
-	import { mapState } from "vuex"
-	
+	import {
+		mapState
+	} from "vuex"
+
 	export default {
-		name: 'main-notiList',
+		name: 'star-notiList',
 		data() {
 			return {
 				// 搜索框关键词绑定，默认值为空
 				keywords: "",
 			}
 		},
-		
+
 		// 生命周期函数，组件被挂载后调用
 		mounted() {
 			// console.log(this.$store.state.m_noti);
 		},
-		
+
 		computed: {
 			// 分发 m_noti:noti.js 的 State
-			...mapState('m_noti', ['allNoti','unreadNoti','readNoti']),
+			...mapState('m_noti', ['starNoti']),
 		},
 
 		methods: {}

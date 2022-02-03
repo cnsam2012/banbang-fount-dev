@@ -3,22 +3,22 @@ export default {
 	namespaced: true,
 
 	state: {
-		allnoti: '',
+		allNoti: '',
 		starNoti: '',
 		unreadNoti: '',
 		readNoti: ''
 	},
 
 	mutations: {
-		// 操作state
+		// 操纵state
 		updateAllNoti(state, val) {
-			state.allnoti = val
+			state.allNoti = val
 		},
 		updateStarNoti(state, val) {
 			state.starNoti = val
 		},
 		updateUnreadNoti(state, val) {
-			state.UnreadNoti = val
+			state.unreadNoti = val
 		},
 		updateReadNoti(state, val) {
 			state.readNoti = val
@@ -29,19 +29,19 @@ export default {
 		/**
 		 * feat: 使用node服务模拟接口，详见 ../server/server.js (cnsam2012.2022.01.31)m_no
 		 * *** 一定要见../server/server/js! ***
-		 * 从模拟接口获取通知列表对象，并commit至mutation
+		 * 从模拟接口分别获取对应通知列表对象，并commit至mutation
 		 */
 		getNoti(context) {
 			uni.request({
 				url: "http://localhost:3000/notiList",
-				success: res => {
+				success: (res) => {
 					// this.allNoti = res.data.allNoti;
 					// this.updateAllNoti(res.data.allNoti)
 					// console.log("******************", res);
 					context.commit("updateAllNoti", res.data.allNoti);
-					context.commit("updateStarNoti", res.data.readNoti);
+					context.commit("updateStarNoti", res.data.starNoti);
 					context.commit("updateUnreadNoti", res.data.unreadNoti);
-					context.commit("updateReadNoti", res.data.starNoti);
+					context.commit("updateReadNoti", res.data.readNoti);
 				}
 			});
 		},

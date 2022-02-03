@@ -2,7 +2,7 @@
 	<view>
 
 		<!-- <my-noti v-if="allnoti"></my-noti> -->
-		<template v-if="allnoti">
+		<template v-if="allNoti">
 			<main-notiList></main-notiList>
 		</template>
 		<template v-else>
@@ -29,13 +29,15 @@
 
 		// 生命周期函数：页面加载时执行
 		onLoad() {
-			// 初始化 Vuex 里的 State
+			// 初始化 Vuex 中的 State
 			this.getNoti();
 		},
+		
+		
 
 		computed: {
 			// 分发 m_noti:noti.js 的 State
-			...mapState('m_noti', ['allnoti']),
+			...mapState('m_noti', ['allNoti']), 
 		},
 
 		methods: {
