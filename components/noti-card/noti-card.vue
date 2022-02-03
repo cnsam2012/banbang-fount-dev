@@ -1,64 +1,63 @@
 <template>
 	<view>
 
-			<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
-				@click="beTapped(item.title)">
-				<!-- 卡片内容区域 -->
+		<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
+			@click="beTapped(item.title)">
+			<!-- 卡片内容区域 -->
 
-				<!-- 通知编号标签 -->
+
+
+			<!-- 通知内容区域 -->
+			<!-- 通知内容 -->
+			<rich-text :nodes="text"></rich-text>
+
+			<!-- 通知编号标签 -->
+			<view class="notiNoBox">
 				<uni-tag :text="item.no" :type="numberColor" :circle="true" size="mini" style="padding: 25rpx;"
 					inverted="true"></uni-tag>
+			</view>
 
-				<!-- 通知内容区域 -->
-				
 
-					<!-- 通知内容 -->
-					<rich-text :nodes="text">
-						
-					</rich-text>
-					
-			
-
-				<!-- 卡片按钮区域 -->
-				<!-- 配合native，阻止事件冒泡 -->
-				<view class="btnBox" style="padding: 30rpx 0 0 0;">
-					<view class="btnInCard" @click.native.stop="checkBeTapped(item.title)">
-						<uni-icons :type="chkIcon" size="25"></uni-icons>
-					</view>
-					<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
-						<uni-icons :type="favIcon" size="25"></uni-icons>
-					</view>
-					<view class="btnInCard" @click.native.stop="moreBeTapped(item.no)">
-						<uni-icons type="more-filled" size="25"></uni-icons>
-					</view>
+			<!-- 卡片按钮区域 -->
+			<!-- 配合native，阻止事件冒泡 -->
+			<view class="btnBox" style="padding: 30rpx 0 0 0;">
+				<view class="btnInCard" @click.native.stop="checkBeTapped(item.title)">
+					<uni-icons :type="chkIcon" size="25"></uni-icons>
 				</view>
-			</uni-card>
-
-			<!-- "更多"菜单内容 -->
-			<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
-				<!-- 按钮区域 -->
-				<view class="btnBox" style="padding: 0;">
-					<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
-						<uni-icons :type="chkIcon" size="25">
-						</uni-icons>
-						<text>{{altReadStat}}</text>
-					</view>
-					<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
-						<uni-icons :type="favIcon" size="25">
-						</uni-icons>
-						<text>{{altFavStat}}</text>
-					</view>
+				<view class="btnInCard" @click.native.stop="favBeTapped(item.title)">
+					<uni-icons :type="favIcon" size="25"></uni-icons>
 				</view>
-				<!-- 列表菜单 -->
-				<uni-list>
-					<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
-					</uni-list-item>
-					<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
-					</uni-list-item>
-					<!-- <uni-list-item title="取消" clickable @click.native.stop="closeMenu(i, item.no)"></uni-list-item> -->
-					<uni-list-item title="取消" clickable @click.native.stop="closeMenu(item.no)"></uni-list-item>
-				</uni-list>
-			</uni-popup>
+				<view class="btnInCard" @click.native.stop="moreBeTapped(item.no)">
+					<uni-icons type="more-filled" size="25"></uni-icons>
+				</view>
+			</view>
+		</uni-card>
+
+		<!-- "更多"菜单内容 -->
+		<uni-popup ref="popup" type="bottom" background-color="#fff" @click.native.stop>
+			<!-- 按钮区域 -->
+			<view class="btnBox" style="padding: 0;">
+				<view @click.native.stop="checkBeTapped(item.title)" class="btnInMore">
+					<uni-icons :type="chkIcon" size="25">
+					</uni-icons>
+					<text>{{altReadStat}}</text>
+				</view>
+				<view @click.native.stop="favBeTapped(item.title)" class="btnInMore">
+					<uni-icons :type="favIcon" size="25">
+					</uni-icons>
+					<text>{{altFavStat}}</text>
+				</view>
+			</view>
+			<!-- 列表菜单 -->
+			<uni-list>
+				<uni-list-item title="对此通知有疑问" clickable @click.native.stop="doubtBeTapped(item.title)">
+				</uni-list-item>
+				<uni-list-item title="分享通知" clickable @click.native.stop="shareBeTapped(item.title)">
+				</uni-list-item>
+				<!-- <uni-list-item title="取消" clickable @click.native.stop="closeMenu(i, item.no)"></uni-list-item> -->
+				<uni-list-item title="取消" clickable @click.native.stop="closeMenu(item.no)"></uni-list-item>
+			</uni-list>
+		</uni-popup>
 
 
 	</view>
@@ -86,16 +85,16 @@
 
 		mounted() {
 			// console.log(this.item);
-			
+
 			// 读取通知已读状态
-			if(this.item.level < 0 ) {
+			if (this.item.level < 0) {
 				this.altReadStat = "标记为未读";
 				this.chkIcon = "flag-filled";
 				this.numberColor = "primary";
 			}
-			
+
 			// 读取通知收藏状态
-			if(this.item.isStar) {
+			if (this.item.isStar) {
 				this.altFavStat = "取消收藏";
 				this.favIcon = "starhalf";
 			}
@@ -115,10 +114,10 @@
 					level: 1
 				},
 			},
-			'text':{
-				type:String
+			'text': {
+				type: String
 			}
-			
+
 		},
 		methods: {
 
@@ -263,19 +262,7 @@
 			// 	this.$refs.readPopup.close();
 			// },
 
-			// 响应搜索框的“搜索”动作
-			searchConfirm() {
-				// console.log(this.keywords);
-				
-				// 弹框提示输入的关键词
-				var msg = this.keywords;
-				wx.showToast({
-					title: msg,
-					mask: true,
-					icon: 'success',
-					duration: 1500
-				})
-			}
+
 		}
 
 	}
@@ -286,6 +273,16 @@
 		padding: 20px;
 		font-size: 14px;
 		line-height: 24px;
+	}
+
+	/* 通知编号标签盒子 */
+	.notiNoBox {
+		// border: 1px solid deeppink;
+		height: 50rpx;
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		align-items: center;
 	}
 
 	/* 按钮盒子 */

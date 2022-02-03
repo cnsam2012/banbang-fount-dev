@@ -12,7 +12,8 @@
 
 			<!-- 渲染收藏通知列表 -->
 			<view v-for="(item, i) in starNoti" :key="item.no">
-				<noti-card :item='item'></noti-card>
+				<!-- <noti-card :item='item'></noti-card> -->
+				<noti-card :item='item' v-if="search(item,keywords)" :text="searchReturn(item,keywords)"></noti-card>
 			</view>
 
 		</uni-collapse>
@@ -45,7 +46,30 @@
 			...mapState('m_noti', ['starNoti']),
 		},
 
-		methods: {}
+		methods: {
+			//返回模糊查询结果
+			search(a,b) {
+				return a.content.match(b)
+			},
+			//返回查询并替换掉后的内容
+			searchReturn(a,b) {
+				return a.content.replace(new RegExp(b,"gm"),'<b style="color:black!important;">'+ b +'</b>')
+			},
+			
+			// 响应搜索框的“搜索”动作
+			searchConfirm() {
+				// console.log(this.keywords);
+				
+				// 弹框提示输入的关键词
+				var msg = this.keywords;
+				wx.showToast({
+					title: msg,
+					mask: true,
+					icon: 'success',
+					duration: 1500
+				})
+			}
+		}
 	}
 </script>
 

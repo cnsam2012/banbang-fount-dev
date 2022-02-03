@@ -15,8 +15,7 @@
 			<!-- 约定 level >= 0 即为未读通知 -->
 			<!-- 渲染未读通知列表 -->
 			<view v-for="(item, i) in unreadNoti" :key="item.no">		
-		
-				<noti-card :item='item' v-show="search(item,keywords)" :text="search1(item,keywords)"></noti-card>
+				<noti-card :item='item' v-if="search(item,keywords)" :text="searchReturn(item,keywords)"></noti-card>
 			</view>
 
 			<!-- 折叠已读通知 -->
@@ -25,7 +24,8 @@
 				<!-- 约定 level < 0 即为已读通知 --> 
 				<!-- 渲染已读通知列表 -->
 				<view v-for="(item, i) in readNoti" :key="item.no">
-					<noti-card :item='item'></noti-card>
+					<noti-card :item='item' v-if="search(item,keywords)" :text="searchReturn(item,keywords)"></noti-card>
+					<!-- <noti-card :item='item'></noti-card> -->
 				</view>
 			</uni-collapse-item>
 
@@ -44,12 +44,19 @@
 			return {
 				// 搜索框关键词绑定，默认值为空
 				keywords: "",
+				temp1: "abcdef",
+				tmep2: "gh",
+				temp3: "bcd",
+				temp4: "de"
 			}
 		},
 		
 		// 生命周期函数，组件被挂载后调用
 		mounted() {
 			// console.log(this.$store.state.m_noti);
+			// console.log("*****************", this.temp1.match(this.temp2));
+			// console.log("*****************", this.temp1.match(this.temp3));
+			// console.log("*****************", this.temp1.match(this.temp4));
 		},
 		
 		computed: {
@@ -58,13 +65,28 @@
 		},
 
 		methods: {
+			
 			//返回模糊查询结果
 			search(a,b) {
 				return a.content.match(b)
 			},
 			//返回查询并替换掉后的内容
-			search1(a,b) {
-				return a.content.replace(new RegExp(b,"gm"),'<b style="color:red!important;">'+ b +'</b>')
+			searchReturn(a,b) {
+				return a.content.replace(new RegExp(b,"gm"),'<b style="color:black!important;">'+ b +'</b>')
+			},
+			
+			// 响应搜索框的“搜索”动作
+			searchConfirm() {
+				// console.log(this.keywords);
+				
+				// 弹框提示输入的关键词
+				var msg = this.keywords;
+				wx.showToast({
+					title: msg,
+					mask: true,
+					icon: 'success',
+					duration: 1500
+				})
 			}
 		}
 	}
