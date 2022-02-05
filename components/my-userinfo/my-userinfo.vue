@@ -4,6 +4,7 @@
 			<image :src="userinfo.avatarUrl" class="avatar"></image>
 			<view class="nickname">{{userinfo.nickName}}</view>
 		</view>
+		<my-function></my-function>
 	</view>
 </template>
 
