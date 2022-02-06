@@ -33,7 +33,7 @@
 		data() {
 			return {
 				// 定义数据仅作测试，尚未连接至主页
-				notiNo: 10001,
+				notiNo: -10000,
 
 				fileValue: []
 			};
@@ -48,6 +48,12 @@
 			// 分发 m_noti:noti.js 的 State
 			...mapState('m_noti', ['allNoti']),
 
+		},
+		
+		// 生命周期函数
+		onLoad(options) {
+			// console.log(options);
+			this.notiNo = options.notiNo;
 		},
 
 		methods: {

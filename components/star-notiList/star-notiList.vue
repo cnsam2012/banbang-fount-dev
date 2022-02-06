@@ -3,8 +3,8 @@
 
 		<!-- 搜索框组件 -->
 		<!-- TODO：keywords数据默认为空字符串，但仍被编译器认为存在内容，原因未知 -->
-		<uni-search-bar @confirm="searchConfirm" bgColor="#eaeaea" placeholder="输入关键词" focus="false" radius="20"
-			v-model="keywords" cancelButton="none">
+		<uni-search-bar @confirm="searchConfirm" bgColor="#eaeaea" placeholder="输入关键词" radius="20"
+			v-model="keywords" cancelButton="auto">
 		</uni-search-bar>
 
 		<!-- 为与主页统一样式，故保留 uni-collapse 标签 -->

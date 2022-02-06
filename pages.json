@@ -40,21 +40,30 @@
         "enablePullDownRefresh" : true
     },
     "tabBar" : {
-        "backgroundColor" : "#f8f8f8",
+		// "custom": true,
+		"borderStyle": "white",
+        "backgroundColor" : "white",
         "position" : "top",
+        // "position" : "bottom",
         "selectedColor" : "#00aa00",
         "list" : [
             {
                 "pagePath" : "pages/home/home",
                 "text" : "全部"
+				// "iconPath":"./static/tabbar-icon/home-outline.png",
+				// "selectedIconPath":"./static/tabbar-icon/home-outline-selected.png"
             },
             {
                 "pagePath" : "pages/star/star",
                 "text" : "收藏"
+				// "iconPath":"./static/tabbar-icon/star-outline.png",
+				// "selectedIconPath":"./static/tabbar-icon/star-outline-selected.png"
             },
             {
                 "pagePath" : "pages/my/my",
                 "text" : "我的"
+				// "iconPath":"./static/tabbar-icon/person-outline.png",
+				// "selectedIconPath":"./static/tabbar-icon/person-outline-selected.png"
             }
         ]
     },

@@ -2,7 +2,7 @@
 	<view>
 
 		<uni-card :title="item.title" mode="title" :is-shadow="true" :extra="getNotiLevelStr(item.level)"
-			@click="beTapped(item.title)">
+			@click="beTapped(item.no)">
 			<!-- 卡片内容区域 -->
 
 
@@ -163,13 +163,16 @@
 
 			// mask:true 阻止点击穿透，后续不再作此注释
 			// 卡片点击事件
-			beTapped(msg) {
+			beTapped(itemNo) {
 				// console.log(msg);
-				wx.showToast({
-					title: msg,
-					mask: true,
-					icon: 'success',
-					duration: 1500
+				// wx.showToast({
+				// 	title: msg,
+				// 	mask: true,
+				// 	icon: 'success',
+				// 	duration: 1500
+				// });
+				uni.navigateTo({
+					url: '../../subpkg/noti-detail/noti-detail?notiNo=' + itemNo
 				})
 			},
 

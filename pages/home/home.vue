@@ -33,6 +33,15 @@
 			this.getNoti();
 		},
 		
+		// 下拉刷新时执行
+		onPullDownRefresh() {
+			// 更新 Vuex 中的 State
+			this.getNoti();
+			setTimeout(function(){
+				uni.stopPullDownRefresh()
+			},2000);
+		},
+		
 		
 
 		computed: {
