@@ -87,10 +87,10 @@
 					title: '提醒',
 					content: '确认要退出吗'
 				}).catch(err => err)
+				
 				if (succ && succ.confirm) {
 					this.updateUserInfo({}),
 					this.updateToken('')
-					
 				}
 				
 			}
