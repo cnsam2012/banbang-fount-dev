@@ -26,7 +26,21 @@
 	                }
 	            }
 	        ]
-	    }
+	    },
+		{
+			"root":"mypkg",
+			"pages": [
+				{
+                    "path" : "noti-send/noti-send",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+		}
 	],
 	
     "globalStyle" : {
