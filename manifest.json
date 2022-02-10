@@ -50,8 +50,15 @@
     "mp-weixin" : {
         "appid" : "wxbbe5e30654766025",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : false
         },
         "usingComponents" : true
+    },
+    "h5" : {
+        "router" : {
+            "base" : "",
+            "mode" : "hash"
+        }
     }
 }

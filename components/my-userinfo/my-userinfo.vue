@@ -9,7 +9,7 @@
 		<!-- 用户界面功能模块 -->
 		<view class="panel-lish">
 			<!-- 第一个功能面板 -->
-			<view class="panel">
+			<view class="panel-col">
 				<view class="panel-item" @click="sendNoti">
 					<text>图片区</text>
 					<text>发布通知</text>
@@ -34,19 +34,17 @@
 			<!-- 第二个功能面板 -->
 			<view>
 
-			</view class=>
+			</view >
 			<!-- 第三个功能面板 -->
-			<view class="panel-lish">
-				<view class="panel-item-row">
+			<view class="panel-row">
+				<view class="panel-item">
+					<text>占位</text>
+				</view>
+				<view class="panel-item">
 					
 					<text>占位</text>
 				</view>
-				<view class="panel-item-row">
-					
-					<text>占位</text>
-				</view>
-				<view class="panel-item-row" @click="logout()">
-					
+				<view class="panel-item" @click="logout()">
 					<text>退出登录</text>
 				</view>
 			</view>
@@ -57,12 +55,11 @@
 <script>
 	import {
 		mapState,
-		mapMutations
+		mapMutations 
 	} from 'vuex'
 
 	export default {
 		name: "my-userinfo",
-
 		data() {
 			return {
 
@@ -76,9 +73,8 @@
 		methods: {
 			...mapMutations('m_user', ['updateUserInfo', 'updateToken']),
 			sendNoti() {
-				uni.showToast({
-					title: '测试',
-					duration: 1500
+				uni.navigateTo({
+					url: '../../mypkg/noti-send/noti-send' 
 				})
 			},
 			
@@ -100,6 +96,7 @@
 
 <style lang="scss">
 	.my-userinfo-container {
+		
 		.info-box {
 			height: 400rpx;
 			background-color: #c1c1c1;
@@ -128,11 +125,9 @@
 		}
 
 		.panel-lish {
-
-			.panel {
+			.panel-col {
 				display: flex;
 				justify-content: space-around;
-
 				.panel-item {
 					display: flex;
 					flex-direction: column;
@@ -140,14 +135,19 @@
 					// justify-content: space-around;
 					padding: 20rpx 0;
 					font-size: 13px;
-
 				}
-				.panel-item-row {
+			}
+			.panel-row {
+				position: absolute;
+				bottom: 20px;
+				
+				.panel-item {
+					
 					display: flex;
 					flex-direction: row;
 					align-items: center;
 					// justify-content: space-around;
-					padding: 20rpx 0;
+					padding: 5px 0px 5px 10px;
 					font-size: 13px;
 				}
 			}
