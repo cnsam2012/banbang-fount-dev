@@ -2,14 +2,14 @@
 		    <view>
 		        <uni-forms ref="form" :modelValue="formData" :rules="rules" >
 					
-					<uni-forms-item>
+				<!-- 	<uni-forms-item>
 						<view class="noti-class">
 						<uni-data-checkbox v-model="formData.class" :localdata="formData.range" :multiple="true" ></uni-data-checkbox>
 						</view>
-					</uni-forms-item>
+					</uni-forms-item> -->
 					
 		            <uni-forms-item  name="name" >
-		                <uni-easyinput type="text" v-model="formData.name" placeholder="请输入姓名"/>
+		                <uni-easyinput type="text" v-model="formData.name" placeholder="输入标题"/>
 		            </uni-forms-item>
 					
 		           <!-- <uni-forms-item label="邮箱" name="email">
@@ -38,18 +38,6 @@
 					@fail="fail"
 					/>
 					</uni-forms-item>
-					
-					
-					<uni-file-picker 
-						v-model="imageValue" 
-						fileMediatype="image" 
-						mode="grid" 
-						@select="select" 
-						@progress="progress" 
-						@success="success" 
-						@fail="fail" 
-					/>
-					
 		        </uni-forms>
 				
 		        <button @click="submit">Submit</button>
@@ -60,7 +48,6 @@
 	export default {
 		 data() {
 		        return {
-					imageValue: [],
 					 items: [{
 					          text: "一年级",
 					          value: "1-0",
@@ -90,7 +77,6 @@
 						noti: '',
 						class: '',
 						notiimg: [],
-						
 						range: [{"value": 0,"text": "篮球"    },{"value": 1,"text": "足球"},{"value": 2,"text": "游泳"}]
 		            },
 		            rules: {
@@ -118,25 +104,17 @@
 		        }
 		    },
 		    methods: { // 上传成功
-            select(e){
-            				console.log('选择文件：',e),
-							console.log('选择文件：',this.$data.imageValue)
-            			},
-            			// 获取上传进度
-            			progress(e){
-            				console.log('上传进度：',e)
-							
-            			},
-            			
-            			// 上传成功
-            			success(e){
-            				console.log('上传成功')
-            			},
-            			
-            			// 上传失败
-            			fail(e){
-            				console.log('上传失败：',e)
-            			},
+            success(e){
+                console.log('上传成功')
+            },
+
+            // 上传失败
+            fail(e){
+                console.log('上传失败：',e)
+            },
+			select(e){
+				console.log(e)
+			},
 				
 				
 		        /**
